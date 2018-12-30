@@ -7,7 +7,7 @@
 
 #import "CTMediator+MBWXAuthActions.h"
 NSString *const kCTMediatorWXAuthTarget = @"BMWXAuth";
-NSString *const kCTMediatorActionWXAuthHandleOpenURL = @"AuthHandleOpenURL";
+NSString *const kCTMediatorActionWXAuthHandleOpenURL = @"WXAuthHandleOpenURL";
 @implementation CTMediator (MBWXAuthActions)
 - (BOOL)CTMediator_WXAuthHandleOpenURL:(NSDictionary *)info
 {
