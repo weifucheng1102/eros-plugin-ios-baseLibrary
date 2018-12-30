@@ -116,12 +116,12 @@
 - (void)setItemFontSize
 {
     NSString *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:K_FONT_SIZE_KEY];
-    CGFloat currFont = 10.0;
+    CGFloat currFont = 11.0;
     CGFloat titleOffsetVertical = -3;
     // 标准字体
     if (!fontSize || [fontSize isEqualToString:K_FONT_SIZE_NORM])
     {
-        titleOffsetVertical = -1;
+        titleOffsetVertical = 0;
     }
     else if ([fontSize isEqualToString:K_FONT_SIZE_BIG])
     {
