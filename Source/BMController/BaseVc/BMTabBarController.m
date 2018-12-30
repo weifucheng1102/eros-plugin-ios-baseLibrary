@@ -116,7 +116,7 @@
 - (void)setItemFontSize
 {
     NSString *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:K_FONT_SIZE_KEY];
-    CGFloat currFont = 9.0;
+    CGFloat currFont = 10.0;
     CGFloat titleOffsetVertical = -3;
     // 标准字体
     if (!fontSize || [fontSize isEqualToString:K_FONT_SIZE_NORM])
@@ -125,12 +125,12 @@
     }
     else if ([fontSize isEqualToString:K_FONT_SIZE_BIG])
     {
-        currFont = 9.0 * K_FontSizeBig_Scale;
+        currFont = 10.0 * K_FontSizeBig_Scale;
         titleOffsetVertical = -1;
     }
     else if ([fontSize isEqualToString:k_FONT_SIZE_EXTRALARGE])
     {
-        currFont = 9.0 * K_FontSizeExtralarge_Scale;
+        currFont = 10.0 * K_FontSizeExtralarge_Scale;
         titleOffsetVertical = 0;
     }
     
