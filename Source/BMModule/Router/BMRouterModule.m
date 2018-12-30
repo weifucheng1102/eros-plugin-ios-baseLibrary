@@ -104,7 +104,7 @@ WX_EXPORT_METHOD(@selector(clearHomePage))
 }
 
 /** 刷新app */
-- (void)setHomePage:(NSDdictionary *)info
+- (void)setHomePage:(NSDictionary *)info
 {
     if (![info[@"path"] isKindOfClass:[NSString class]]) {
         WXLogError(@"setHomePage Error: %@",info[@"path"]);
