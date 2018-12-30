@@ -104,14 +104,16 @@ WX_EXPORT_METHOD(@selector(clearHomePage))
 }
 
 /** 刷新app */
-- (void)setHomePage:(NSString *)path
+- (void)setHomePage:(NSDdictionary *)info
 {
-    if (![path isKindOfClass:[NSString class]]) {
-        WXLogError(@"setHomePage Error: %@",path);
+    if (![info[@"path"] isKindOfClass:[NSString class]]) {
+        WXLogError(@"setHomePage Error: %@",info[@"path"]);
         return;
     }
-    BM_SetUserDefaultData(K_HomePagePath, path);
-    [[NSNotificationCenter defaultCenter] postNotificationName:K_BMAppReStartNotification object:nil];
+    BM_SetUserDefaultData(K_HomePagePath, info[@"path"]);
+    if (info[@"refresh"]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:K_BMAppReStartNotification object:nil];
+    }
 }
 
 /** 清除设置的 HomePage 信息 */
