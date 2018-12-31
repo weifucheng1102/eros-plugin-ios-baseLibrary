@@ -79,7 +79,10 @@
     if ([url.host isEqualToString:@"pay"]) {
         return [[CTMediator sharedInstance] CTMediator_PayHandleOpenURL:dic];
     }
-    
+    // 微信授权回调
+    if ([url.host isEqualToString:@"oauth"]) {
+        return [[CTMediator sharedInstance] CTMediator_WXAuthHandleOpenURL:dic];
+    }
     result = [BMRouterManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     return result;
 }
