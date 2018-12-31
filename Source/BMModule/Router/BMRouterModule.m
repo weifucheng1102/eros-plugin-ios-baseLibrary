@@ -111,8 +111,9 @@ WX_EXPORT_METHOD(@selector(clearHomePage))
         return;
     }
     BM_SetUserDefaultData(K_HomePagePath, info[@"path"]);
-    if (info[@"refresh"]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:K_BMAppReStartNotification object:nil];
+    BOOL refresh = [[info objectForKey:@"refresh"] boolValue];
+    if (refresh) {
+         [[NSNotificationCenter defaultCenter] postNotificationName:K_BMAppReStartNotification object:nil];
     }
 }
 
