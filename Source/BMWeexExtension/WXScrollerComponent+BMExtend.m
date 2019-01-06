@@ -8,11 +8,14 @@
 
 #import "WXScrollerComponent+BMExtend.h"
 #import <BMDotGifHeader.h>
+#import "BMDotGifFooter.h"
 
 @implementation WXScrollerComponent (BMExtend)
 
 WX_EXPORT_METHOD(@selector(refreshEnd));
 WX_EXPORT_METHOD(@selector(loadMoreEnd));
+WX_EXPORT_METHOD(@selector(noticeNoMoreData));
+WX_EXPORT_METHOD(@selector(resetNoMoreData));
 
 
 - (instancetype)bmScroller_initWithRef:(NSString *)ref type:(NSString *)type styles:(NSDictionary *)styles attributes:(NSDictionary *)attributes events:(NSArray *)events weexInstance:(WXSDKInstance *)weexInstance
@@ -113,7 +116,7 @@ WX_EXPORT_METHOD(@selector(loadMoreEnd));
 
     NSNumber *showLoadMore = objc_getAssociatedObject(self, "bm_showLoadMore");
     if (showLoadMore && [showLoadMore boolValue]) {
-        MJRefreshAutoNormalFooter *footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        MJRefreshAutoNormalFooter *footer = [BMDotGifFooter footerWithRefreshingBlock:^{
             [self bmLoadMore];
         }];
         NSString *loadingMoreTitle = objc_getAssociatedObject(self, "bm_loadingMoreTitle");
@@ -121,6 +124,10 @@ WX_EXPORT_METHOD(@selector(loadMoreEnd));
             [footer setTitle:loadingMoreTitle forState:MJRefreshStateRefreshing];
             [footer setTitle:loadingMoreTitle forState:MJRefreshStateIdle];
         }
+        // 隐藏加载中文字
+        footer.refreshingTitleHidden = YES;
+        // 不显示已经全部加载完毕
+        [footer setTitle: @"- 您已到达最底部 - " forState:MJRefreshStateNoMoreData];
         scrollView.mj_footer = footer;
     }
 }
@@ -160,6 +167,24 @@ WX_EXPORT_METHOD(@selector(loadMoreEnd));
     UIScrollView *scrollView = self.view;
     
     [scrollView.mj_footer endRefreshing];
+}
+
+/**
+ 全部加载完毕
+ */
+- (void)noticeNoMoreData
+{
+    UIScrollView *scrollView = self.view;
+    [scrollView.mj_footer noticeNoMoreData];
+}
+
+/**
+消除尾部"没有更多数据"的状态
+ */
+- (void)resetNoMoreData
+{
+    UIScrollView *scrollView = self.view;
+    [scrollView.mj_footer resetNoMoreData];
 }
 
 @end
