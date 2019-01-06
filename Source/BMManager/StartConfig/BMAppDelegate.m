@@ -15,6 +15,7 @@
 #import <CTMediator+BMPushActions.h>
 #import <CTMediator+BMShareActions.h>
 #import <CTMediator+BMPayActions.h>
+#import <CTMediator+MBWXAuthActions.h>
 
 @interface BMAppDelegate ()
 {
