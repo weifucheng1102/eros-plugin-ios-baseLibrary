@@ -16,6 +16,12 @@
 #import <CTMediator+BMShareActions.h>
 #import <CTMediator+BMPayActions.h>
 #import <CTMediator+MBWXAuthActions.h>
+// jpush
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
+#import <JPush/JPUSHService.h>
+#import "JPushWeexPluginModule.h"
 
 @interface BMAppDelegate ()
 {
@@ -40,7 +46,10 @@
     
     /** 注册通知 当js更新文件准备就绪用户点击立即升级会触发这个方法 重新加载最新js资源文件 */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startApp) name:K_BMAppReStartNotification object:nil];
-    
+    /* jpush */
+    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:launchOptions forKey:@"launchOptions"];
+    [ud synchronize];
     return YES;
 }
 
@@ -98,7 +107,6 @@
     /* 注册推送失败 */
     WXLogInfo(@"%@",[error localizedDescription]);
 }
-
 //- (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 //{
 //    [[CTMediator sharedInstance] CTMediator_performFetchWithCompletionHandler:@{@"block":completionHandler}];
@@ -114,6 +122,7 @@
     if (completionHandler) {
         [dic setValue:completionHandler forKey:@"block"];
     }
+    /* jpush */
     [[CTMediator sharedInstance] CTMediator_receiveRemoteNotification:dic];
 }
 

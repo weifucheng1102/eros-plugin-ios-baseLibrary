@@ -7,7 +7,7 @@
 
 #import "CTMediator+BMPushActions.h"
 
-NSString *const kCTMediatorPushTarget = @"BMPush";
+NSString *const kCTMediatorPushTarget = @"JPush";
 
 NSString *const kCTMediatorActionRegisterDeviceToken = @"registerForRemoteNotificationsWithDeviceToken";
 NSString *const kCTMediatorActionSetIsLaunchedByNotification = @"setIsLaunchedByNotification";
