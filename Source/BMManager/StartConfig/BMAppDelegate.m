@@ -22,6 +22,7 @@
 #endif
 #import <JPush/JPUSHService.h>
 #import "JPushWeexPluginModule.h"
+#import "QYSDK.h"
 
 @interface BMAppDelegate ()
 {
@@ -50,6 +51,8 @@
     NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
     [ud setObject:launchOptions forKey:@"launchOptions"];
     [ud synchronize];
+    //    七鱼客服初始化
+    [[QYSDK sharedSDK] registerAppId:@"d0272648f6cee6970423077219de0505" appName:@"好产拼"];
     return YES;
 }
 
