@@ -10,6 +10,7 @@
 #import "WatermarkView.h"
 #import "WXUtility.h"
 #import "BMScanQRViewController.h"
+#import <WechatOpenSDK/WXApi.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @interface BMToolsModule ()
@@ -30,7 +31,26 @@ WX_EXPORT_METHOD(@selector(env:));
 WX_EXPORT_METHOD_SYNC(@selector(networkStatus));
 WX_EXPORT_METHOD(@selector(watchNetworkStatus:));
 WX_EXPORT_METHOD(@selector(clearWatchNetworkStatus));
+WX_EXPORT_METHOD(@selector(openApp:callback:));
 
+- (void)openApp:(NSString *)info callback:(WXModuleCallback)callback
+{
+    NSURL * url = [NSURL URLWithString:info];
+    BOOL canOpen = [[UIApplication sharedApplication] canOpenURL:url];
+    //先判断是否能打开该url
+    if (canOpen)
+    {   //打开
+        [[UIApplication sharedApplication] openURL:url];
+    }
+    if (callback) {
+        int status = 0;
+        if (canOpen){
+            status = 1;
+        }
+        NSDictionary *resDic = [NSDictionary configCallbackDataWithResCode:status msg:nil data:nil];
+        callback(resDic);
+    }
+}
 /** 调用扫一扫 */
 - (void)scan:(WXModuleCallback)callback
 {
