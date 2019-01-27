@@ -7,6 +7,6 @@
 
 #import <MJRefresh/MJRefresh.h>
 
-@interface BMDotGifFooter : MJRefreshAutoGifFooter
+@interface BMDotGifFooter : MJRefreshBackGifFooter
 
 @end

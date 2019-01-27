@@ -116,7 +116,7 @@ WX_EXPORT_METHOD(@selector(resetNoMoreData));
 
     NSNumber *showLoadMore = objc_getAssociatedObject(self, "bm_showLoadMore");
     if (showLoadMore && [showLoadMore boolValue]) {
-        MJRefreshAutoNormalFooter *footer = [BMDotGifFooter footerWithRefreshingBlock:^{
+        BMDotGifFooter *footer = [BMDotGifFooter footerWithRefreshingBlock:^{
             [self bmLoadMore];
         }];
         NSString *loadingMoreTitle = objc_getAssociatedObject(self, "bm_loadingMoreTitle");
@@ -125,9 +125,13 @@ WX_EXPORT_METHOD(@selector(resetNoMoreData));
             [footer setTitle:loadingMoreTitle forState:MJRefreshStateIdle];
         }
         // 隐藏加载中文字
-        footer.refreshingTitleHidden = YES;
-        // 不显示已经全部加载完毕
+//        footer.refreshingTitleHidden = YES;
+        // 清除文字
+        [footer setTitle:@"" forState:MJRefreshStateIdle];
+        [footer setTitle:@"" forState:MJRefreshStatePulling];
+        [footer setTitle:@"" forState:MJRefreshStateRefreshing];
         [footer setTitle: @"- 您已到达最底部 - " forState:MJRefreshStateNoMoreData];
+        footer.stateLabel.textColor = [UIColor lightGrayColor];
         scrollView.mj_footer = footer;
     }
 }
