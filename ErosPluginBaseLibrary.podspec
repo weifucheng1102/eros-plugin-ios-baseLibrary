@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.dependency 'YTKNetwork', '2.0.3'
   s.dependency 'SocketRocket', '0.4.2'
   s.dependency 'SDWebImage', '3.7.6'
-  s.dependency 'MJRefresh', '3.1.12'
+  s.dependency 'MJRefresh', '3.1.15.7'
   s.dependency 'CTMediator', '13'
 
   #Device信息非ARC
