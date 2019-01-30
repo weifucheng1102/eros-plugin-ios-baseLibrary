@@ -98,7 +98,7 @@ typedef NS_ENUM(NSUInteger, BMResourceCheckUpdateCode) {
 - (void)appDidBecomeActive
 {
     /** 检查js更新 */
-    [self checkNewVersion:YES];
+    // [self checkNewVersion:YES];
     
 }
 
