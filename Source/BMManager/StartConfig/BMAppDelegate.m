@@ -82,11 +82,7 @@
         [dic setValue:annotation forKey:@"annotation"];
     }
     
-    // 分享回调
-    BOOL result = [[CTMediator sharedInstance] CTMediator_ShareHandleOpenURL:dic];
-    if (result) {
-        return result;
-    }
+  
     
     // 微信支付回调
     if ([url.host isEqualToString:@"pay"]) {
@@ -95,6 +91,11 @@
     // 微信授权回调
     if ([url.host isEqualToString:@"oauth"]) {
         return [[CTMediator sharedInstance] CTMediator_WXAuthHandleOpenURL:dic];
+    }
+      // 分享回调
+    BOOL result = [[CTMediator sharedInstance] CTMediator_ShareHandleOpenURL:dic];
+    if (result) {
+        return result;
     }
     result = [BMRouterManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     return result;
