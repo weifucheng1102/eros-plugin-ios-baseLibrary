@@ -92,10 +92,14 @@
     if ([url.host isEqualToString:@"oauth"]) {
         return [[CTMediator sharedInstance] CTMediator_WXAuthHandleOpenURL:dic];
     }
-      // 分享回调
-    BOOL result = [[CTMediator sharedInstance] CTMediator_ShareHandleOpenURL:dic];
-    if (result) {
-        return result;
+    if ([url.query containsString:@"TestAutoCheckContextId"]) {
+            // 分享回调
+        BOOL result = [[CTMediator sharedInstance] CTMediator_ShareHandleOpenURL:dic];
+        if (result) {
+            return result;
+        }
+    } else{
+       return  [WXApi handleOpenURL:url delegate:self];
     }
     result = [BMRouterManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     return result;
