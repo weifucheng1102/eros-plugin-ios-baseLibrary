@@ -22,6 +22,7 @@
 #endif
 #import <JPush/JPUSHService.h>
 #import "JPushWeexPluginModule.h"
+#import "WXApi.h"
 // #import "QYSDK.h"
 
 @interface BMAppDelegate ()
@@ -101,7 +102,7 @@
     } else{
        return  [WXApi handleOpenURL:url delegate:self];
     }
-    result = [BMRouterManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+    BOOL result = [BMRouterManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
     return result;
 }
 
