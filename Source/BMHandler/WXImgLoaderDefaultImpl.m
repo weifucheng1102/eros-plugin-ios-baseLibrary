@@ -45,6 +45,12 @@
         }
         return nil;
     }
+    UIImage * iamge = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:url];
+    
+    if (iamge) {
+        completedBlock(iamge,nil,YES);
+        return nil;
+    }
  
     if ([url hasPrefix:@"//"]) {
         url = [@"https:" stringByAppendingString:url];
@@ -113,6 +119,9 @@
     [SDWebImageDownloader.sharedDownloader downloadImageWithURL:[NSURL URLWithString:url] options:SDWebImageRetryFailed | SDWebImageAllowInvalidSSLCertificates progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
         
     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+        [[SDImageCache sharedImageCache]storeImage:image imageData:data forKey:url cacheType:SDImageCacheTypeDisk completion:^{
+            
+        }];
         if (completedBlock) {
             completedBlock(image,error,finished);
         }
