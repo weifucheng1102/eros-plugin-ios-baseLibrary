@@ -52,7 +52,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startApp) name:K_BMAppReStartNotification object:nil];
     
     NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
-    if (url && [[NSString stringWithFormat:@"%@",url] containsString:[self getUrlSchemesWithName:@"syapp"]]) {
+    if (url && [self getUrlSchemesWithName:@"syapp"] && [[NSString stringWithFormat:@"%@",url] containsString:[self getUrlSchemesWithName:@"syapp"]]) {
         NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
         [ud setObject:nil forKey:@"launchOptions"];
         [ud synchronize];
@@ -83,7 +83,7 @@
     
     [[CTMediator sharedInstance] CTMediator_setIsLaunchedByNotification:NO];
     
-    if ([[NSString stringWithFormat:@"%@",url] containsString:[self getUrlSchemesWithName:@"syapp"]]) {
+    if (url && [self getUrlSchemesWithName:@"syapp"] && [[NSString stringWithFormat:@"%@",url] containsString:[self getUrlSchemesWithName:@"syapp"]]) {
         [self sendEventWithUrl:url];
         return YES;
     }
@@ -166,7 +166,7 @@
     //处理url
     NSString * urlString = [NSString stringWithFormat:@"%@",url];
     //url 包含参数  才发送事件请求js
-    if ([urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[NSString stringWithFormat:@"%@://",[self getUrlSchemesWithName:@"syapp"]]]) {
+    if ([self getUrlSchemesWithName:@"syapp"] && [urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[NSString stringWithFormat:@"%@://",[self getUrlSchemesWithName:@"syapp"]]]) {
         //发送事件
         [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:[self parameterWithURL:url]];
         //存数据
@@ -190,6 +190,7 @@
             }
         }
     }
+    return nil;
 }
 
     /**
