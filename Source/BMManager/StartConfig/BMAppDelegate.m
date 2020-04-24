@@ -24,6 +24,7 @@
 #import "JPushWeexPluginModule.h"
 #import "WXApi.h"
 #import "BMGlobalEventManager.h"
+#import "BMStorageModule.h"
 // #import "QYSDK.h"
 
 @interface BMAppDelegate ()
@@ -168,6 +169,9 @@
     if ([urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[NSString stringWithFormat:@"%@://",[self getUrlSchemesWithName:@"syapp"]]]) {
         //发送事件
         [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:[self parameterWithURL:url]];
+        //存数据
+        BMStorageModule * module = [[BMStorageModule alloc]init];
+        [module setDataSync:@"startApp" data:[self parameterWithURL:url]];
     }
 }
 

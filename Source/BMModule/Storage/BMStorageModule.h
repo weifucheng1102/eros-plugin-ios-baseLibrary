@@ -10,5 +10,5 @@
 #import <WeexSDK.h>
 
 @interface BMStorageModule : NSObject <WXModuleProtocol>
-
+- (NSDictionary *)setDataSync:(NSString *)key data:(id)data;
 @end
