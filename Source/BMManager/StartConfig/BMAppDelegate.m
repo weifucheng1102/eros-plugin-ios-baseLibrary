@@ -166,21 +166,11 @@
     NSString * urlString = [NSString stringWithFormat:@"%@",url];
     //url 包含参数  才发送事件请求js
     if ([urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[self getUrlSchemesWithName:@"syapp"]]) {
-        //处理参数
-        NSString * paramsString = [urlString componentsSeparatedByString:@"?"][1];
-        NSMutableDictionary * paramsDic = [[NSMutableDictionary alloc]initWithCapacity:0];
-        if ([paramsString containsString:@"&"]) {
-            NSArray * arr = [paramsString componentsSeparatedByString:@"&"];
-            for (NSString * str in arr) {
-                [paramsDic setValue:[str componentsSeparatedByString:@"="][0] forKey:[str componentsSeparatedByString:@"="][1]];
-            }
-        }else{
-            [paramsDic setValue:[urlString componentsSeparatedByString:@"="][0] forKey:[urlString componentsSeparatedByString:@"="][1]];
-        }
         //发送事件
-        [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:paramsDic];
+        [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:[self parameterWithURL:url]];
     }
 }
+
 -(NSString *)getUrlSchemesWithName:(NSString *)name
 {
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
@@ -197,5 +187,24 @@
         }
     }
 }
+
+    /**
+ 获取url的所有参数
+ @param url 需要提取参数的url
+ @return NSDictionary
+ */
+- (NSDictionary *)parameterWithURL:(NSURL *)url {
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithCapacity:2];
+    //传入url创建url组件类
+    NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithString:url.absoluteString];
+    
+    //回调遍历所有参数，添加入字典
+    [urlComponents.queryItems enumerateObjectsUsingBlock:^(NSURLQueryItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [params setObject:obj.value forKey:obj.name];
+    }];
+    
+    return params;
+}
+
 
 @end
