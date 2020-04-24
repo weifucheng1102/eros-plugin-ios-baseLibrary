@@ -23,6 +23,7 @@
 #import <JPush/JPUSHService.h>
 #import "JPushWeexPluginModule.h"
 #import "WXApi.h"
+#import "BMGlobalEventManager.h"
 // #import "QYSDK.h"
 
 @interface BMAppDelegate ()
@@ -48,10 +49,20 @@
     
     /** 注册通知 当js更新文件准备就绪用户点击立即升级会触发这个方法 重新加载最新js资源文件 */
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startApp) name:K_BMAppReStartNotification object:nil];
-    /* jpush */
-    NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:launchOptions forKey:@"launchOptions"];
-    [ud synchronize];
+    
+    NSURL *url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
+    if (url && [[NSString stringWithFormat:@"%@",url] containsString:[self getUrlSchemesWithName:@"syapp"]]) {
+        NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+        [ud setObject:nil forKey:@"launchOptions"];
+        [ud synchronize];
+        [self sendEventWithUrl:url];
+        
+    }else{
+        /* jpush */
+        NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+        [ud setObject:launchOptions forKey:@"launchOptions"];
+        [ud synchronize];
+    }
     //    七鱼客服初始化
     // [[QYSDK sharedSDK] registerAppId:@"d0272648f6cee6970423077219de0505" appName:@"好产拼"];
     return YES;
@@ -71,7 +82,10 @@
     
     [[CTMediator sharedInstance] CTMediator_setIsLaunchedByNotification:NO];
     
-    
+    if ([[NSString stringWithFormat:@"%@",url] containsString:[self getUrlSchemesWithName:@"syapp"]]) {
+        [self sendEventWithUrl:url];
+        return YES;
+    }
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     if (url) {
         [dic setValue:url forKey:@"url"];
@@ -144,6 +158,44 @@
     /** 加载页面 */
     self.window.rootViewController = [[BMMediatorManager shareInstance] loadHomeViewController];
     [self.window makeKeyAndVisible];
+}
+
+-(void)sendEventWithUrl:(NSURL *)url
+{
+    //处理url
+    NSString * urlString = [NSString stringWithFormat:@"%@",url];
+    //url 包含参数  才发送事件请求js
+    if ([urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[self getUrlSchemesWithName:@"syapp"]]) {
+        //处理参数
+        NSString * paramsString = [urlString componentsSeparatedByString:@"?"][1];
+        NSMutableDictionary * paramsDic = [[NSMutableDictionary alloc]initWithCapacity:0];
+        if ([paramsString containsString:@"&"]) {
+            NSArray * arr = [paramsString componentsSeparatedByString:@"&"];
+            for (NSString * str in arr) {
+                [paramsDic setValue:[str componentsSeparatedByString:@"="][0] forKey:[str componentsSeparatedByString:@"="][1]];
+            }
+        }else{
+            [paramsDic setValue:[urlString componentsSeparatedByString:@"="][0] forKey:[urlString componentsSeparatedByString:@"="][1]];
+        }
+        //发送事件
+        [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:paramsDic];
+    }
+}
+-(NSString *)getUrlSchemesWithName:(NSString *)name
+{
+    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+    NSArray *bundleUrltypes = [infoDic objectForKey:@"CFBundleURLTypes"];
+    for (NSDictionary * dic in bundleUrltypes) {
+        if ([[dic objectForKey:@"CFBundleURLName"] isEqualToString:name]) {
+            //CFBundleURLSchemes为啥是个数组 ==！
+            NSArray * schemesArr = [dic objectForKey:@"CFBundleURLSchemes"];
+            if (schemesArr.count!=0) {
+                return schemesArr[0];
+            }else{
+                return  nil;
+            }
+        }
+    }
 }
 
 @end
