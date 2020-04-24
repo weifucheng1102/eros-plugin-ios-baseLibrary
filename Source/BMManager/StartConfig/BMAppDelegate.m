@@ -165,7 +165,7 @@
     //处理url
     NSString * urlString = [NSString stringWithFormat:@"%@",url];
     //url 包含参数  才发送事件请求js
-    if ([urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[self getUrlSchemesWithName:@"syapp"]]) {
+    if ([urlString containsString:[self getUrlSchemesWithName:@"syapp"]]&& ![urlString isEqualToString:[NSString stringWithFormat:@"%@://",[self getUrlSchemesWithName:@"syapp"]]]) {
         //发送事件
         [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:[self parameterWithURL:url]];
     }
