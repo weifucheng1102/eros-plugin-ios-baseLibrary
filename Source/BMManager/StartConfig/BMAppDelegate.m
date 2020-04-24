@@ -171,7 +171,7 @@
         [BMGlobalEventManager  sendGlobalEvent:@"startApp" params:[self parameterWithURL:url]];
         //存数据
         BMStorageModule * module = [[BMStorageModule alloc]init];
-        [module setDataSync:@"startApp" data:[self parameterWithURL:url]];
+        [module setDataSync:[NSString stringWithFormat:@"%@startApp",[self getdDBPrefix]] data:[self parameterWithURL:url]];
     }
 }
 
@@ -208,6 +208,13 @@
     }];
     
     return params;
+}
+
+//获取DB前缀dbPrefix
+-(NSString *)getdDBPrefix
+{
+    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+    return [infoDic objectForKey:@"dbPrefix"];
 }
 
 
